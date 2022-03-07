@@ -15,6 +15,7 @@ class _MainPageState extends State<MainPage> {
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
       navigationBar: const CupertinoNavigationBar(
+        //automaticallyImplyLeading: false,
         middle: Text('insidethemind'),
       ),
       child: Center(

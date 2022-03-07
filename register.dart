@@ -32,6 +32,8 @@ class _SignInState extends State<SignIn> {
             textFieldHeader('Password:', 16),
             const SizedBox(height: 10),
             textInput('Enter A Secure Password', CupertinoIcons.lock_open, true, passwordController),
+            const SizedBox(height: 10),
+            textFieldHeader('Password:', 10),
             const SizedBox(height: 30),
             textFieldHeader('Re-Enter Password:', 16),
             const SizedBox(height: 10),
@@ -41,16 +43,31 @@ class _SignInState extends State<SignIn> {
               padding: EdgeInsets.symmetric(vertical: 10, horizontal: 50),
               child: Text('Sign Up', style: TextStyle(color: Colors.white)),
               onPressed: () {
-                FirebaseAuth.instance.createUserWithEmailAndPassword(
+                  FirebaseAuth.instance.createUserWithEmailAndPassword(
                     email: emailController.text,
                     password: passwordController.text,
                   ).then((value) {
-                  Navigator.of(context).pushNamed('LogInScreen');
-                }).onError((error, stackTrace)
-                {
-                  print(error.toString());
-                }
-                );
+                    Navigator.of(context).pushNamed('HomeView');
+                  }).onError((error, stackTrace) {
+                    showCupertinoDialog(
+                        context: context,
+                        builder: (context) {
+                          return CupertinoAlertDialog(
+                            title: Text('Error'),
+                            content: Text(error!.toString()),
+                            actions: <CupertinoDialogAction>[
+                              CupertinoDialogAction(
+                                child: const Text('Ok'),
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                              ),
+                            ],
+                          );
+                        }
+                    );
+                  }
+                  );
               },
             ),
           ],

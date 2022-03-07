@@ -38,16 +38,31 @@ class _LogInState extends State<LogIn> {
                 padding: EdgeInsets.symmetric(vertical: 10, horizontal: 50),
                 child: Text('Log In', style: TextStyle(color: Colors.white)),
               onPressed: () {
-                FirebaseAuth.instance.signInWithEmailAndPassword(
-                  email: emailController.text,
-                  password: passwordController.text,
-                ).then((value) {
-                  Navigator.of(context).pushNamed('HomeView');
-                }).onError((error, stackTrace)
-                {
-                  print('whoops, try again.');
-                }
-                );
+                    FirebaseAuth.instance.signInWithEmailAndPassword(
+                      email: emailController.text,
+                      password: passwordController.text,
+                    ).then((value) {
+                      Navigator.of(context).pushNamed('HomeView');
+                    }).onError((error, stackTrace) {
+                      showCupertinoDialog(
+                          context: context,
+                          builder: (context) {
+                            return CupertinoAlertDialog(
+                              title: Text('Error'),
+                              content: Text(error!.toString()),
+                              actions: <CupertinoDialogAction>[
+                                CupertinoDialogAction(
+                                  child: const Text('Ok'),
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                ),
+                              ],
+                            );
+                          }
+                      );
+                    }
+                    );
               }
             ),
           ],
