@@ -42,6 +42,7 @@ class _LogInState extends State<LogIn> {
                     email: emailController.text,
                     password: passwordController.text,
                   ).then((value) {
+
                     Navigator.of(context).pushNamed('HomeView');
                   }).onError((error, stackTrace) {
                     showCupertinoDialog(

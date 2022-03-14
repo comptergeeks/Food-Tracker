@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'reuseable.dart';
 import 'main.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 class SignIn extends StatefulWidget {
   const SignIn({Key? key}) : super(key: key);
 
@@ -46,6 +47,8 @@ class _SignInState extends State<SignIn> {
                     email: emailController.text,
                     password: passwordController.text,
                   ).then((value) {
+                    FirebaseFirestore.instance.collection("users").doc(emailController.text).set({});
+                    FirebaseFirestore.instance.collection("users").doc(emailController.text).collection('foodData').add({});
                     Navigator.of(context).pushNamed('HomeView');
                   }).onError((error, stackTrace) {
                     showCupertinoDialog(
