@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'reuseable.dart';
 import 'main.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:provider/provider.dart';
+import 'providers/user_provider.dart';
 
 class LogIn extends StatefulWidget {
   const LogIn({Key? key}) : super(key: key);
@@ -42,7 +44,8 @@ class _LogInState extends State<LogIn> {
                     email: emailController.text,
                     password: passwordController.text,
                   ).then((value) {
-
+                    context.read<UserToSave>().setUser(emailController.text);
+                    print(context.read<UserToSave>().user);
                     Navigator.of(context).pushNamed('HomeView');
                   }).onError((error, stackTrace) {
                     showCupertinoDialog(

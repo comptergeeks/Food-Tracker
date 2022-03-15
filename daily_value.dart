@@ -1,11 +1,13 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'reuseable.dart';
 import 'register.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'services/manage_data.dart';
 import 'food_tracker.dart';
 import 'dart:convert';
+import 'package:provider/provider.dart';
+import 'providers/user_provider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class DailyTracker extends StatefulWidget {
   const DailyTracker({Key? key}) : super(key: key);
@@ -67,23 +69,34 @@ class _AlertDialogForDataState extends State<AlertDialogForData> {
   TextEditingController allergyController = TextEditingController();
   StoreMethods storeData = new StoreMethods();
 
+  //QuerySnapshot? dataSnapshot;
+
+  @override
+  void initState() {
+    super.initState();
+    
+    storeData.getData(context.read<UserToSave>().user ).then((result){
+      //dataSnapshot = result;
+    }
+    );
+  }
 
   uploadData() {
-    if(mealController.text.isEmpty || allergyController.text.isEmpty) {
+    if (mealController.text.isEmpty || allergyController.text.isEmpty) {
       print("please make sure all fields are fields are full");
-    } else if (int.parse(allergyController.text) > 5 || int.parse(allergyController.text) < 0 ) {
+    } else if (int.parse(allergyController.text) > 5 ||
+        int.parse(allergyController.text) < 0) {
       print('please input a valid number');
     } else {
       Navigator.pop(context);
       Map<String, String> dataMap = {
-        "food":  mealController.text,
+        "food": mealController.text,
         "allergenInfo": allergyController.text,
-
-
       };
-      storeData.storeData(dataMap);
+      storeData.storeData(dataMap, context.read<UserToSave>().user );
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return Center(
