@@ -17,10 +17,35 @@ class DailyTracker extends StatefulWidget {
 }
 
 class DailyTrackerState extends State<DailyTracker> {
+  StoreMethods storeData = new StoreMethods(); 
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
-      child: SizedBox(
+      child: Column (
+        children: <Widget> [
+          Expanded(
+            child: StreamBuilder<QuerySnapshot>(
+              stream: FirebaseFirestore.instance.collection('users').doc(context.read<UserToSave>().user).collection('foodData').snapshots(),
+              builder: (context, snapshot) {
+                if(snapshot.hasError) {
+                  return Text('daddy chill');
+                }
+                return ListView.builder(
+                  shrinkWrap: true,
+                    itemCount: snapshot.data?.docs.length,
+                    itemBuilder: (BuildContext context, int index) {
+
+
+                      QueryDocumentSnapshot<Object?>? documentSnapshot = snapshot.data?.docs[index];
+                      //Map<String, dynamic> data = snapshot.data!.docs[index] as Map<String, dynamic>;
+                      return Text((documentSnapshot != null) ?documentSnapshot.data().toString():'');
+
+                    }
+                );
+              }
+          ),
+          ),
+       SizedBox(
         height: (MediaQuery.of(context).size.height - 100.0),
         child: Align(
           alignment: Alignment.bottomRight,
@@ -37,8 +62,8 @@ class DailyTrackerState extends State<DailyTracker> {
                   opaque: false,
                   pageBuilder: (_, anim1, anim2) => SlideTransition(
                     position:
-                        Tween<Offset>(begin: Offset(0.0, 1.0), end: Offset.zero)
-                            .animate(anim1),
+                    Tween<Offset>(begin: Offset(0.0, 1.0), end: Offset.zero)
+                        .animate(anim1),
                     child: AlertDialogForData(),
                   ),
                 ),
@@ -52,6 +77,8 @@ class DailyTrackerState extends State<DailyTracker> {
             },
           ),
         ),
+      ),
+    ],
       ),
     );
   }
@@ -74,7 +101,7 @@ class _AlertDialogForDataState extends State<AlertDialogForData> {
   @override
   void initState() {
     super.initState();
-    
+
     storeData.getData(context.read<UserToSave>().user ).then((result){
       //dataSnapshot = result;
     }
@@ -136,4 +163,4 @@ class _AlertDialogForDataState extends State<AlertDialogForData> {
       ),
     );
   }
-}
+} 
