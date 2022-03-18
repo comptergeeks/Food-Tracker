@@ -8,6 +8,7 @@ import 'dart:convert';
 import 'package:provider/provider.dart';
 import 'providers/user_provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cupertino_list_tile/cupertino_list_tile.dart';
 
 class DailyTracker extends StatefulWidget {
   const DailyTracker({Key? key}) : super(key: key);
@@ -15,70 +16,97 @@ class DailyTracker extends StatefulWidget {
   @override
   State<DailyTracker> createState() => DailyTrackerState();
 }
-
 class DailyTrackerState extends State<DailyTracker> {
-  StoreMethods storeData = new StoreMethods(); 
+  StoreMethods storeData = new StoreMethods();
+  Icon returnIcon(AsyncSnapshot snapshot, int index) {
+    final data = snapshot.requireData;
+    //on tap feature to display sized box
+    //maybe subtitle feature for allergy level 3(moderate)
+    if(data.docs[index]['allergy'] == '0') {
+      return Icon(CupertinoIcons.sun_max);
+    }
+    if(data.docs[index]['allergy'] == '1') {
+      return Icon(CupertinoIcons.cloud_sun);
+    }
+    if(data.docs[index]['allergy'] == '2') {
+      return Icon(CupertinoIcons.cloud_sun_rain);
+    }
+    if(data.docs[index]['allergy'] == '3') {
+      return Icon(CupertinoIcons.cloud_drizzle);
+    }
+    if(data.docs[index]['allergy'] == '4') {
+      return Icon(CupertinoIcons.cloud_bolt);
+    }
+    if(data.docs[index]['allergy'] == '5') {
+      return Icon(CupertinoIcons.cloud_bolt_rain);
+    }
+    return Icon(CupertinoIcons.smiley);
+  }
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
-      child: Column (
-        children: <Widget> [
+      child: Column(
+        children: <Widget>[
+          headingForData('Food', 20, true),
           Expanded(
+            flex: 3,
             child: StreamBuilder<QuerySnapshot>(
-              stream: FirebaseFirestore.instance.collection('users').doc(context.read<UserToSave>().user).collection('foodData').snapshots(),
-              builder: (context, snapshot) {
-                if(snapshot.hasError) {
-                  return Text('daddy chill');
-                }
-                return ListView.builder(
-                  shrinkWrap: true,
-                    itemCount: snapshot.data?.docs.length,
-                    itemBuilder: (BuildContext context, int index) {
-
-
-                      QueryDocumentSnapshot<Object?>? documentSnapshot = snapshot.data?.docs[index];
-                      //Map<String, dynamic> data = snapshot.data!.docs[index] as Map<String, dynamic>;
-                      return Text((documentSnapshot != null) ?documentSnapshot.data().toString():'');
-
-                    }
-                );
-              }
+                stream: FirebaseFirestore.instance
+                    .collection('users')
+                    .doc(context.read<UserToSave>().user)
+                    .collection('foodData')
+                    .snapshots(),
+                builder: (context, snapshot) {
+                  return ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: snapshot.data?.docs.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        final data = snapshot.requireData;
+                        return CupertinoListTile(
+                          trailing: returnIcon(snapshot, index),
+                        title: Text('${data.docs[index]['food']}'),
+                        subtitle: Text('${data.docs[index]['allergy']}'),
+                        );
+                      });
+                }),
           ),
-          ),
-       SizedBox(
-        height: (MediaQuery.of(context).size.height - 100.0),
-        child: Align(
-          alignment: Alignment.bottomRight,
-          child: CupertinoButton(
-            child: Icon(
-              CupertinoIcons.plus_circle,
-              size: 30,
-            ),
-            onPressed: () {
-              Navigator.push(
-                context,
-                PageRouteBuilder(
-                  barrierDismissible: true,
-                  opaque: false,
-                  pageBuilder: (_, anim1, anim2) => SlideTransition(
-                    position:
-                    Tween<Offset>(begin: Offset(0.0, 1.0), end: Offset.zero)
-                        .animate(anim1),
-                    child: AlertDialogForData(),
+          Expanded(
+            flex: 1,
+            child: SizedBox(
+              height: (MediaQuery.of(context).size.height - 100),
+              child: Align(
+                alignment: Alignment.centerRight,
+                child: CupertinoButton(
+                  child: Icon(
+                    CupertinoIcons.plus_circle,
+                    size: 30,
                   ),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      PageRouteBuilder(
+                        barrierDismissible: true,
+                        opaque: false,
+                        pageBuilder: (_, anim1, anim2) => SlideTransition(
+                          position: Tween<Offset>(
+                                  begin: Offset(0.0, 1.0), end: Offset.zero)
+                              .animate(anim1),
+                          child: AlertDialogForData(),
+                        ),
+                      ),
+                    );
+                    // showCupertinoDialog(
+                    // context: context,
+                    // builder: (context) {
+                    // return AlertDialogForData();
+                    // }
+                    // );
+                  },
                 ),
-              );
-              // showCupertinoDialog(
-              // context: context,
-              // builder: (context) {
-              // return AlertDialogForData();
-              // }
-              // );
-            },
+              ),
+            ),
           ),
-        ),
-      ),
-    ],
+        ],
       ),
     );
   }
@@ -98,16 +126,6 @@ class _AlertDialogForDataState extends State<AlertDialogForData> {
 
   //QuerySnapshot? dataSnapshot;
 
-  @override
-  void initState() {
-    super.initState();
-
-    storeData.getData(context.read<UserToSave>().user ).then((result){
-      //dataSnapshot = result;
-    }
-    );
-  }
-
   uploadData() {
     if (mealController.text.isEmpty || allergyController.text.isEmpty) {
       print("please make sure all fields are fields are full");
@@ -116,11 +134,16 @@ class _AlertDialogForDataState extends State<AlertDialogForData> {
       print('please input a valid number');
     } else {
       Navigator.pop(context);
+      //List<String> info = [mealController.text, allergyController.text];
+      /*
       Map<String, String> dataMap = {
         "food": mealController.text,
         "allergenInfo": allergyController.text,
       };
-      storeData.storeData(dataMap, context.read<UserToSave>().user );
+      */
+
+      storeData.storeData(mealController.text, allergyController.text,
+          context.read<UserToSave>().user,DateTime.now());
     }
   }
 
@@ -163,4 +186,4 @@ class _AlertDialogForDataState extends State<AlertDialogForData> {
       ),
     );
   }
-} 
+}
