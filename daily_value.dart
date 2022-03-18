@@ -57,13 +57,13 @@ class DailyTrackerState extends State<DailyTracker> {
                     .collection('foodData')
                     .snapshots(),
                 builder: (context, snapshot) {
-                  if (snapshot.data?.docs.length == 0) return Align(
-                    alignment: Alignment.center,
-                    child: Text('Add Some Entries By Tapping The Plus Icon', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),),
-                  );
                   if (!snapshot.hasData) return Align(
                     alignment: Alignment.center,
                     child: CupertinoActivityIndicator(),
+                  );
+                  if (snapshot.data?.docs.length == 1) return Align(
+                    alignment: Alignment.center,
+                    child: Text('Add Some Entries By Tapping The Plus Icon', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),),
                   );
                   return ListView.builder(
                       shrinkWrap: true,

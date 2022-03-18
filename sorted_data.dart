@@ -166,6 +166,7 @@ class _DataSortedState extends State<DataSorted> {
                   .collection('users')
                   .doc(context.read<UserToSave>().user)
                   .collection('foodData').where('allergy', isEqualTo: context.read<IndexToSave>().indexNew.toString()).snapshots(),
+              //write this as method add to an array, then search for values to add
               builder: (context, snapshot) {
                 if (!snapshot.hasData) return Align(
                   alignment: Alignment.center,

@@ -59,6 +59,7 @@ class _SignInState extends State<SignIn> {
                   )
                       .then((value) {
                         context.read<UserToSave>().setUser(emailController.text);
+                        print(context.read<UserToSave>().user);
                     FirebaseFirestore.instance
                         .collection("users")
                         .doc(emailController.text)
