@@ -6,6 +6,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'food_tracker.dart';
 import 'package:provider/provider.dart';
 import 'providers/user_provider.dart';
+import 'providers/index_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -14,6 +15,7 @@ void main() async {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => UserToSave()),
+        ChangeNotifierProvider(create: (_) => IndexToSave())
       ],
       child: MyApp()
     ),

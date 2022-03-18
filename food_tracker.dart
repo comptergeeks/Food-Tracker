@@ -31,7 +31,7 @@ class _MainPageState extends State<MainPage> {
           ),
           BottomNavigationBarItem(
             icon: Icon(CupertinoIcons.exclamationmark_circle),
-            label: 'enter data',
+            label: 'Allergen Info',
           ),
           BottomNavigationBarItem(
             icon: Icon(CupertinoIcons.settings),

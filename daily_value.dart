@@ -57,6 +57,14 @@ class DailyTrackerState extends State<DailyTracker> {
                     .collection('foodData')
                     .snapshots(),
                 builder: (context, snapshot) {
+                  if (snapshot.data?.docs.length == 0) return Align(
+                    alignment: Alignment.center,
+                    child: Text('Add Some Entries By Tapping The Plus Icon', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),),
+                  );
+                  if (!snapshot.hasData) return Align(
+                    alignment: Alignment.center,
+                    child: CupertinoActivityIndicator(),
+                  );
                   return ListView.builder(
                       shrinkWrap: true,
                       itemCount: snapshot.data?.docs.length,
@@ -124,8 +132,8 @@ class _AlertDialogForDataState extends State<AlertDialogForData> {
   TextEditingController allergyController = TextEditingController();
   StoreMethods storeData = new StoreMethods();
 
-  //QuerySnapshot? dataSnapshot;
 
+//ADD DATA POP UP FOR INCORRECT FIELD
   uploadData() {
     if (mealController.text.isEmpty || allergyController.text.isEmpty) {
       print("please make sure all fields are fields are full");
