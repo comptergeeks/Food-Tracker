@@ -21,4 +21,7 @@ class StoreMethods {
   getData(String UserName) async{
     return await FirebaseFirestore.instance.collection('users').doc(UserName).collection('foodData').snapshots();
   }
+  deleteData(String UserName) async{
+    return await FirebaseFirestore.instance.collection('users').doc(UserName).collection('foodData').doc().delete();
+  }
 }

@@ -61,21 +61,33 @@ class DailyTrackerState extends State<DailyTracker> {
                     alignment: Alignment.center,
                     child: CupertinoActivityIndicator(),
                   );
-                  if (snapshot.data?.docs.length == 1) return Align(
+                  if(snapshot.data?.docs == 0) return Align(
                     alignment: Alignment.center,
-                    child: Text('Add Some Entries By Tapping The Plus Icon', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),),
+                    child: CupertinoActivityIndicator(),
                   );
-                  return ListView.builder(
+                  //remove auto generated data
+                   return ListView.builder(
                       shrinkWrap: true,
                       itemCount: snapshot.data?.docs.length,
                       itemBuilder: (BuildContext context, int index) {
+                        if (!snapshot.hasData) return Align(
+                          alignment: Alignment.center,
+                          child: CupertinoActivityIndicator(),
+                        );
                         final data = snapshot.requireData;
+                        // List entries = [];
+                        // entries.add('food': data.docs[index]['food']);
+                        // Timestamp timestampFromData = data.docs[index]['time'];
+                        // DateTime date  = timestampFromData.toDate();
+                        // List listOfTimes= <DateTime>[];
+                        // listOfTimes.add(date);
                         return CupertinoListTile(
                           trailing: returnIcon(snapshot, index),
                         title: Text('${data.docs[index]['food']}'),
                         subtitle: Text('${data.docs[index]['allergy']}'),
-                        );
-                      });
+                          );
+                      }
+                      );
                 }),
           ),
           Expanded(
