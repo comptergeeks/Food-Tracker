@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'reuseable.dart';
 import 'main.dart';
 import 'daily_value.dart';
-import 'calendar.dart';
 import 'sorted_data.dart';
 import 'settings.dart';
 
@@ -26,10 +25,6 @@ class _MainPageState extends State<MainPage> {
             label: 'Daily Tracker',
           ),
           BottomNavigationBarItem(
-            icon: Icon(CupertinoIcons.calendar),
-            label: 'Calendar',
-          ),
-          BottomNavigationBarItem(
             icon: Icon(CupertinoIcons.exclamationmark_circle),
             label: 'Allergen Info',
           ),
@@ -51,21 +46,14 @@ class _MainPageState extends State<MainPage> {
                   );
                 });
                 break;
-            case 1:
-            returnValue = CupertinoTabView(builder: (context) {
-            return CupertinoPageScaffold(
-             child: CalendarWithData(),
-            );
-            });
-            break;
-             case 2:
+             case 1:
                 returnValue = CupertinoTabView(builder: (context) {
                   return CupertinoPageScaffold(
                       child: DataSorted(),
                   );
               });
                 break;
-        case 3:
+        case 2:
         returnValue = CupertinoTabView(builder: (context) {
         return CupertinoPageScaffold(
         child: SettingsPage(),

@@ -17,27 +17,28 @@ class DailyTracker extends StatefulWidget {
   State<DailyTracker> createState() => DailyTrackerState();
 }
 class DailyTrackerState extends State<DailyTracker> {
+  List<Map> myList = [];
   StoreMethods storeData = new StoreMethods();
-  Icon returnIcon(AsyncSnapshot snapshot, int index) {
-    final data = snapshot.requireData;
+  Map dataToStore = new Map();
+  Icon returnIcon(List<Map> myList1, int index) {
     //on tap feature to display sized box
     //maybe subtitle feature for allergy level 3(moderate)
-    if(data.docs[index]['allergy'] == '0') {
+    if(myList1[index]['allergyInfo'] == 0) {
       return Icon(CupertinoIcons.sun_max);
     }
-    if(data.docs[index]['allergy'] == '1') {
+    if(myList1[index]['allergyInfo'] == 1) {
       return Icon(CupertinoIcons.cloud_sun);
     }
-    if(data.docs[index]['allergy'] == '2') {
+    if(myList1[index]['allergyInfo'] == 2) {
       return Icon(CupertinoIcons.cloud_sun_rain);
     }
-    if(data.docs[index]['allergy'] == '3') {
+    if(myList1[index]['allergyInfo'] == 3) {
       return Icon(CupertinoIcons.cloud_drizzle);
     }
-    if(data.docs[index]['allergy'] == '4') {
+    if(myList1[index]['allergyInfo'] == 4) {
       return Icon(CupertinoIcons.cloud_bolt);
     }
-    if(data.docs[index]['allergy'] == '5') {
+    if(myList1[index]['allergyInfo'] == 5) {
       return Icon(CupertinoIcons.cloud_bolt_rain);
     }
     return Icon(CupertinoIcons.smiley);
@@ -65,8 +66,21 @@ class DailyTrackerState extends State<DailyTracker> {
                     alignment: Alignment.center,
                     child: CupertinoActivityIndicator(),
                   );
-                  //remove auto generated data
-                   return ListView.builder(
+                  final data = snapshot.requireData;
+                  myList.clear();
+                    //place your code here. It will prevent double data call.
+                    //print(snapshot.requireData.size);
+                    for(int i = 0; i < snapshot.requireData.size; i++) {
+                      dataToStore.addAll({
+                        'food': '${data.docs[i]['food']}',
+                        'allergyInfo': data.docs[i]['allergy']
+                      });
+                      myList.add({
+                        'food': '${data.docs[i]['food']}',
+                        'allergyInfo': data.docs[i]['allergy']
+                      });
+                    }
+                  return ListView.builder(
                       shrinkWrap: true,
                       itemCount: snapshot.data?.docs.length,
                       itemBuilder: (BuildContext context, int index) {
@@ -74,20 +88,24 @@ class DailyTrackerState extends State<DailyTracker> {
                           alignment: Alignment.center,
                           child: CupertinoActivityIndicator(),
                         );
-                        final data = snapshot.requireData;
-                        // List entries = [];
-                        // entries.add('food': data.docs[index]['food']);
-                        // Timestamp timestampFromData = data.docs[index]['time'];
-                        // DateTime date  = timestampFromData.toDate();
-                        // List listOfTimes= <DateTime>[];
-                        // listOfTimes.add(date);
+                        //bubble sort method to order data by
+                        for(int i = 0; i < myList.length -1; i++) {
+                          for(int j = 0; j < myList.length - i - 1; j++) {
+                            if(myList[j]['allergyInfo'] > myList[j + 1]['allergyInfo']) {
+                              Map swapper = myList[j];
+                              myList[j] = myList[j + 1];
+                              myList[j + 1] = swapper;
+                            }
+                          }
+                        }
+                        //print(dataToStore.toString());
                         return CupertinoListTile(
-                          trailing: returnIcon(snapshot, index),
-                        title: Text('${data.docs[index]['food']}'),
-                        subtitle: Text('${data.docs[index]['allergy']}'),
-                          );
+                          trailing: returnIcon(myList, index),
+                          title: Text(myList[index]['food']),
+                          subtitle: Text(myList[index]['allergyInfo'].toString()),
+                        );
                       }
-                      );
+                  );
                 }),
           ),
           Expanded(
@@ -109,7 +127,7 @@ class DailyTrackerState extends State<DailyTracker> {
                         opaque: false,
                         pageBuilder: (_, anim1, anim2) => SlideTransition(
                           position: Tween<Offset>(
-                                  begin: Offset(0.0, 1.0), end: Offset.zero)
+                              begin: Offset(0.0, 1.0), end: Offset.zero)
                               .animate(anim1),
                           child: AlertDialogForData(),
                         ),
@@ -147,6 +165,7 @@ class _AlertDialogForDataState extends State<AlertDialogForData> {
 
 //ADD DATA POP UP FOR INCORRECT FIELD
   uploadData() {
+    if(checkNumeric(allergyController.text) == true) {
     if (mealController.text.isEmpty || allergyController.text.isEmpty) {
       print("please make sure all fields are fields are full");
     } else if (int.parse(allergyController.text) > 5 ||
@@ -154,17 +173,31 @@ class _AlertDialogForDataState extends State<AlertDialogForData> {
       print('please input a valid number');
     } else {
       Navigator.pop(context);
-      //List<String> info = [mealController.text, allergyController.text];
-      /*
-      Map<String, String> dataMap = {
-        "food": mealController.text,
-        "allergenInfo": allergyController.text,
-      };
-      */
-
-      storeData.storeData(mealController.text, allergyController.text,
+      storeData.storeData(mealController.text, int.parse(allergyController.text),
           context.read<UserToSave>().user,DateTime.now());
     }
+    } else{
+      showCupertinoDialog(
+          context: context,
+          builder: (context) {
+            return CupertinoAlertDialog(
+              title: Text('Error'),
+              content: Text('Please make sure you enetered a valid number'),
+              actions: <CupertinoDialogAction>[
+                CupertinoDialogAction(
+                  child: const Text('Ok'),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                ),
+              ],
+            );
+          });
+    }
+  }
+  bool checkNumeric(String passedAllergy) {
+    RegExp _numeric = RegExp(r'^-?[0-9]+$');
+    return _numeric.hasMatch(passedAllergy);
   }
 
   @override

@@ -68,7 +68,7 @@ class _SignInState extends State<SignIn> {
                         .collection("users")
                         .doc(emailController.text)
                         .collection('foodData')
-                        .add({'food': 'Add Entries', 'allergy': 'Add data by pressing the plus button below', 'time': DateTime.now()});
+                        .add({'food': 'Add Entries', 'allergy': 6, 'time': DateTime.now()});
                     //print(context.read<UserToSave>().user);
                     Navigator.of(context).pushNamed('HomeView');
                   }).onError((error, stackTrace) {

@@ -5,18 +5,21 @@ import 'package:provider/provider.dart';
 import '/providers/user_provider.dart';
 import 'package:cupertino_calendar/cupertino_calendar.dart';
 import 'package:mealmanager/calendar.dart';
+import 'dart:convert';
+import 'package:flutter/cupertino.dart';
 
 // var messageRef = db.collection('rooms').doc('roomA')
 //                 .collection('messages').doc('message1')
 class StoreMethods {
-  Future<void> storeData(String food, String allergy, String UserName, DateTime time) async {
-    try {
-      FirebaseFirestore.instance.collection('users').doc(UserName).collection('foodData').add(
-        {'food': food, 'allergy': allergy, 'time': time}
-      );
-    } on Exception catch (error) {
-      print(error);
-    }
+  Future<void> storeData(String food, int allergy, String UserName, DateTime time) async {
+      try {
+        FirebaseFirestore.instance.collection('users').doc(UserName).collection(
+            'foodData').add(
+            {'food': food, 'allergy': allergy, 'time': time}
+        );
+      } on Exception catch (error) {
+        print(error);
+      }
   }
   getData(String UserName) async{
     return await FirebaseFirestore.instance.collection('users').doc(UserName).collection('foodData').snapshots();
@@ -25,3 +28,4 @@ class StoreMethods {
     return await FirebaseFirestore.instance.collection('users').doc(UserName).collection('foodData').doc().delete();
   }
 }
+
