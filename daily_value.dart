@@ -24,22 +24,23 @@ class DailyTrackerState extends State<DailyTracker> {
     //on tap feature to display sized box
     //maybe subtitle feature for allergy level 3(moderate)
     if(myList1[index]['allergyInfo'] == 0) {
-      return Icon(CupertinoIcons.sun_max);
+      return Icon(CupertinoIcons.sun_max, color: CupertinoColors.activeGreen);
     }
     if(myList1[index]['allergyInfo'] == 1) {
-      return Icon(CupertinoIcons.cloud_sun);
+      return Icon(CupertinoIcons.cloud_sun, color: CupertinoColors.systemYellow,);
     }
     if(myList1[index]['allergyInfo'] == 2) {
-      return Icon(CupertinoIcons.cloud_sun_rain);
+      return Icon(CupertinoIcons.cloud_sun_rain, color: CupertinoColors.systemOrange,);
     }
     if(myList1[index]['allergyInfo'] == 3) {
-      return Icon(CupertinoIcons.cloud_drizzle);
+      return Icon(CupertinoIcons.cloud_drizzle, color: Color.fromARGB(
+          255, 250, 100, 0));
     }
     if(myList1[index]['allergyInfo'] == 4) {
-      return Icon(CupertinoIcons.cloud_bolt);
+      return Icon(CupertinoIcons.cloud_bolt, color: CupertinoColors.systemRed,);
     }
     if(myList1[index]['allergyInfo'] == 5) {
-      return Icon(CupertinoIcons.cloud_bolt_rain);
+      return Icon(CupertinoIcons.cloud_bolt_rain, color: CupertinoColors.destructiveRed,);
     }
     return Icon(CupertinoIcons.smiley);
   }

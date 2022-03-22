@@ -22,22 +22,23 @@ class _DataSortedState extends State<DataSorted> {
     //on tap feature to display sized box
     //maybe subtitle feature for allergy level 3(moderate)
     if (index == 0) {
-      return Icon(CupertinoIcons.sun_max, size: 30);
+      return Icon(CupertinoIcons.sun_max, size: 30, color: CupertinoColors.activeGreen,);
     }
     if (index == 1) {
-      return Icon(CupertinoIcons.cloud_sun, size: 30);
+      return Icon(CupertinoIcons.cloud_sun, size: 30, color: CupertinoColors.systemYellow);
     }
     if (index == 2) {
-      return Icon(CupertinoIcons.cloud_sun_rain, size: 30);
+      return Icon(CupertinoIcons.cloud_sun_rain, size: 30, color: CupertinoColors.systemOrange);
     }
     if (index == 3) {
-      return Icon(CupertinoIcons.cloud_drizzle, size: 30);
+      return Icon(CupertinoIcons.cloud_drizzle, size: 30,  color: Color.fromARGB(
+          255, 250, 100, 0), );
     }
     if (index == 4) {
-      return Icon(CupertinoIcons.cloud_bolt, size: 30);
+      return Icon(CupertinoIcons.cloud_bolt, size: 30, color: CupertinoColors.systemRed,);
     }
     if (index == 5) {
-      return Icon(CupertinoIcons.cloud_bolt_rain, size: 30);
+      return Icon(CupertinoIcons.cloud_bolt_rain, size: 30, color: CupertinoColors.destructiveRed,);
     }
     return Icon(CupertinoIcons.multiply_circle, size: 30);
   }
@@ -131,22 +132,23 @@ class _FoodsConsumedState extends State<FoodsConsumed> {
     //on tap feature to display sized box
     //maybe subtitle feature for allergy level 3(moderate)
     if (index == 0) {
-      return Icon(CupertinoIcons.sun_max, size: 30);
+      return Icon(CupertinoIcons.sun_max, size: 30, color: CupertinoColors.activeGreen,);
     }
     if (index == 1) {
-      return Icon(CupertinoIcons.cloud_sun, size: 30);
+      return Icon(CupertinoIcons.cloud_sun, size: 30, color: CupertinoColors.systemYellow);
     }
     if (index == 2) {
-      return Icon(CupertinoIcons.cloud_sun_rain, size: 30);
+      return Icon(CupertinoIcons.cloud_sun_rain, size: 30, color: CupertinoColors.systemOrange);
     }
     if (index == 3) {
-      return Icon(CupertinoIcons.cloud_drizzle, size: 30);
+      return Icon(CupertinoIcons.cloud_drizzle, size: 30,  color: Color.fromARGB(
+          255, 250, 100, 0), );
     }
     if (index == 4) {
-      return Icon(CupertinoIcons.cloud_bolt, size: 30);
+      return Icon(CupertinoIcons.cloud_bolt, size: 30, color: CupertinoColors.systemRed,);
     }
     if (index == 5) {
-      return Icon(CupertinoIcons.cloud_bolt_rain, size: 30);
+      return Icon(CupertinoIcons.cloud_bolt_rain, size: 30, color: CupertinoColors.destructiveRed,);
     }
     return Icon(CupertinoIcons.multiply_circle, size: 30);
   }
